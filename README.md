@@ -2,7 +2,7 @@
 
 # asdf-datadog-static-analyzer [![Build](https://github.com/brentm5/asdf-datadog-static-analyzer/actions/workflows/build.yml/badge.svg)](https://github.com/brentm5/asdf-datadog-static-analyzer/actions/workflows/build.yml) [![Lint](https://github.com/brentm5/asdf-datadog-static-analyzer/actions/workflows/lint.yml/badge.svg)](https://github.com/brentm5/asdf-datadog-static-analyzer/actions/workflows/lint.yml)
 
-[datadog-static-analyzer](https://github.com/brentm5/datadog-static-analyzer) plugin for the [asdf version manager](https://asdf-vm.com).
+[datadog-static-analyzer](https://github.com/DataDog/datadog-static-analyzer) plugin for the [asdf version manager](https://asdf-vm.com).
 
 </div>
 
@@ -15,10 +15,7 @@
 
 # Dependencies
 
-**TODO: adapt this section**
-
-- `bash`, `curl`, `tar`: generic POSIX utilities.
-- `SOME_ENV_VAR`: set this environment variable in your shell config to load the correct version of tool x.
+- `bash`, `curl`, `unzip`: generic POSIX utilities.
 
 # Install
 
