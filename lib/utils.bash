@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for datadog-static-analyzer.
-GH_REPO="https://github.com/brentm5/datadog-static-analyzer"
+GH_REPO="https://github.com/DataDog/datadog-static-analyzer"
 TOOL_NAME="datadog-static-analyzer"
 TOOL_TEST="datadog-static-analyzer -v"
 
@@ -40,9 +40,15 @@ download_release() {
 	local version filename url
 	version="$1"
 	filename="$2"
+	platform=$(get_platform)
+	arch=$(get_arch)
+	ext="zip"
 
-	# TODO: Adapt the release URL convention for datadog-static-analyzer
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	if [ "$platform" != "darwin" ]; then
+		fail "asdf-$TOOL_NAME currently only supports darwin platform"
+	fi
+
+	url="$GH_REPO/releases/download/${version}/datadog-static-analyzer-${arch}-apple-darwin.${ext}"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -61,7 +67,6 @@ install_version() {
 		mkdir -p "$install_path"
 		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
 
-		# TODO: Assert datadog-static-analyzer executable exists.
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
@@ -71,4 +76,33 @@ install_version() {
 		rm -rf "$install_path"
 		fail "An error occurred while installing $TOOL_NAME $version."
 	)
+}
+
+get_arch() {
+	local arch=""
+
+	case "$(uname -m)" in
+	x86_64 | amd64) arch="x86_64" ;;
+	aarch64 | arm64) arch="aarch64" ;;
+	*)
+		fail "Arch '$(uname -m)' not supported!"
+		;;
+	esac
+
+	echo -n $arch
+}
+
+get_platform() {
+	local platform=""
+
+	case "$(uname | tr '[:upper:]' '[:lower:]')" in
+	darwin) platform="darwin" ;;
+	#linux) platform="linux" ;;
+	#windows) platform="windows" ;;
+	*)
+		fail "Platform '$(uname -m)' not supported!"
+		;;
+	esac
+
+	echo -n $platform
 }
